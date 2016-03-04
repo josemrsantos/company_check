@@ -4,19 +4,24 @@ from subprocess import call
 import sys
 import argparse
 import urllib
+import os
 
 def get_data_from_file(file_name):
     with open(file_name) as f:
         return f.readlines()
 
 def run_chrome(company_list, queries):
+    if os.name=="nt":
+        call_chrome = ["start","chrome"]
+    else:
+        call_chrome = ["google-chrome"]
     for i in company_list:
         for j in queries:
             # Add "" to company. replace spaces by + . 
             name_str = urllib.quote_plus('"'+i+'"')
             query_str = j.replace(" ", "+")
             query =  name_str + "+" + query_str
-            call(["google-chrome", "https://www.google.co.uk/#q="+query])
+            call(call_chrome + ["https://www.google.co.uk/#q="+query])
 
 def main():
     """
